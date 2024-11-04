@@ -57,6 +57,9 @@ return {
 				black = {
 					prepend_args = { "--line-length", "79" },
 				},
+				ktfmt = {
+					prepend_args = { "--indent", "4" },
+				},
 			},
 
 			format_on_save = true,

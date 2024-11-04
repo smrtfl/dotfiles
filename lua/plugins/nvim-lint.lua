@@ -14,7 +14,7 @@ return {
 			java = { "checkstyle" },
 			c = { "cpplint" },
 			cpp = { "cpplint" },
-			go = { "golangci-lint" },
+			-- go = { "golangci-lint" },
 			lua = { "luacheck" },
 			html = { "htmlhint" },
 			javascript = { "eslint_d" },

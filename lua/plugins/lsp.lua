@@ -52,6 +52,7 @@ return {
 				"terraformls",
 				"lua_ls",
 				"yamlls",
+				"gitlab_ci_ls",
 				"jsonls",
 				"lemminx",
 				"dockerls",
@@ -127,6 +128,41 @@ return {
 					})
 				end,
 			},
+
+			["html"] = function()
+				lspconfig.html.setup({
+					capabilities = capabilities,
+					filetypes = { "html", "vue" },
+				})
+			end,
+
+			["cssls"] = function()
+				lspconfig.cssls.setup({
+					capabilities = capabilities,
+					filetypes = { "css", "scss", "less", "sass", "vue" },
+				})
+			end,
+
+			["cssmodules_ls"] = function()
+				lspconfig.cssmodules_ls.setup({
+					capabilities = capabilities,
+					filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "vue" },
+				})
+			end,
+
+			["ts_ls"] = function()
+				lspconfig.ts_ls.setup({
+					capabilities = capabilities,
+					filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "vue" },
+				})
+			end,
+
+			["volar"] = function()
+				lspconfig.volar.setup({
+					capabilities = capabilities,
+					filetypes = { "vue" },
+				})
+			end,
 		})
 
 		local cmp_select = { behavior = cmp.SelectBehavior.Select }
@@ -134,7 +170,7 @@ return {
 		cmp.setup({
 			snippet = {
 				expand = function(args)
-					require("luasnip").lsp_expand(args.body) -- For `luasnip` users.
+					require("luasnip").lsp_expand(args.body)
 				end,
 			},
 
@@ -162,7 +198,7 @@ return {
 				focusable = false,
 				style = "minimal",
 				border = "rounded",
-				source = "always",
+				source = true,
 				header = "",
 				prefix = "",
 			},
