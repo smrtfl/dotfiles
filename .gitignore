@@ -2,6 +2,7 @@
 !.gitignore
 
 # Neovim
+nvim/*
 !nvim/
 !nvim/**
 nvim/lazy-lock.json
