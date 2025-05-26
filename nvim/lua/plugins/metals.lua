@@ -61,7 +61,7 @@ return {
     metals_config.on_attach = function(client, bufnr)
       require('metals').setup_dap()
 
-      map('n', '<leader>ws', function()
+      vim.keymap.set('n', '<leader>ws', function()
         require('metals').hover_worksheet()
       end)
     end
