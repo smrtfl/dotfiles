@@ -1,4 +1,5 @@
 return {
+
   'nvim-lualine/lualine.nvim',
 
   dependencies = {
@@ -6,34 +7,82 @@ return {
   },
 
   config = function()
+    local clients_lsp = function()
+      local clients = vim.lsp.get_clients()
+
+      if next(clients) == nil then
+        return ''
+      end
+
+      local active_client = {}
+
+      for _, client in pairs(clients) do
+        table.insert(active_client, client.name)
+      end
+
+      return ' ' .. table.concat(active_client, ' | ')
+    end
+
     require('lualine').setup {
       options = {
         icons_enabled = true,
         theme = 'onedark',
-        -- component_separators = { left = '', right = '' },
-        -- section_separators = { left = '', right = '' },
+        section_separators = { left = '', right = '' },
         component_separators = { left = '', right = '' },
-        section_separators = { left = '', right = '' },
-        disabled_filetypes = { 'neo-tree' },
+        disabled_filetypes = {},
       },
       sections = {
         lualine_a = { 'mode' },
-        lualine_b = { 'branch', 'diff', 'diagnostics' },
-        lualine_c = { 'filename' },
-        lualine_x = { 'filetype' },
+        lualine_b = {
+          {
+            'filetype',
+            icon_only = true,
+            padding = { left = 1, right = 0 },
+          },
+          {
+            'filename',
+            symbols = {
+              modified = '[+]',
+              readonly = '[-]',
+              unnamed = '[No Name]',
+              newfile = '[New]',
+            },
+            padding = { left = 0, right = 1 },
+          },
+        },
+        lualine_c = {
+          {
+            'branch',
+            icon = '',
+          },
+          {
+            'diff',
+            symbols = { added = ' ', modified = ' ', removed = ' ' },
+            colored = false,
+          },
+        },
+        lualine_x = {
+          {
+            'diagnostics',
+            symbols = { error = ' ', warn = ' ', info = ' ', hint = ' ' },
+            update_in_insert = true,
+          },
+        },
+        lualine_y = { clients_lsp },
+        lualine_z = {
+          { 'location', icon = '' },
+        },
+      },
+      inactive_sections = {
+        lualine_a = { 'filename' },
+        lualine_b = {},
+        lualine_c = {},
+        lualine_x = {},
         lualine_y = {},
         lualine_z = { 'location' },
       },
-      inactive_sections = {
-        lualine_a = {},
-        lualine_b = {},
-        lualine_c = { 'filename' },
-        lualine_x = { 'location' },
-        lualine_y = {},
-        lualine_z = {},
-      },
       tabline = {},
-      extensions = { 'neo-tree' },
+      extensions = { 'nvim-tree', 'mason', 'lazy', 'nvim-dap-ui' },
     }
   end,
 }

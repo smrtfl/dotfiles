@@ -51,7 +51,12 @@ return { -- Fuzzy Finder (files, lsp, etc)
 
     -- [[ Configure Telescope ]]
     -- See `:help telescope` and `:help telescope.setup()`
-    require('telescope').setup {
+
+    local file_ignore_patterns = { 'node_modules/', '.git/', '.venv', '.idea' }
+
+    local telescope = require 'telescope'
+    local themes = require 'telescope.themes'
+    telescope.setup {
       -- You can put your default mappings / updates / etc. in here
       --  All the info you're looking for is in `:help telescope.setup()`
       --
@@ -60,17 +65,28 @@ return { -- Fuzzy Finder (files, lsp, etc)
       --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
       --   },
       -- },
-      -- pickers = {}
+      pickers = {
+        live_grep = {
+          file_ignore_patterns = file_ignore_patterns,
+          additional_args = function(_)
+            return { '--hidden' }
+          end,
+        },
+        find_files = {
+          file_ignore_patterns = file_ignore_patterns,
+          hidden = true,
+        },
+      },
       extensions = {
         ['ui-select'] = {
-          require('telescope.themes').get_dropdown(),
+          themes.get_dropdown(),
         },
       },
     }
 
     -- Enable Telescope extensions if they are installed
-    pcall(require('telescope').load_extension, 'fzf')
-    pcall(require('telescope').load_extension, 'ui-select')
+    pcall(telescope.load_extension, 'fzf')
+    pcall(telescope.load_extension, 'ui-select')
 
     -- See `:help telescope.builtin`
     local builtin = require 'telescope.builtin'
@@ -88,7 +104,7 @@ return { -- Fuzzy Finder (files, lsp, etc)
     -- Slightly advanced example of overriding default behavior and theme
     vim.keymap.set('n', '<leader>/', function()
       -- You can pass additional configuration to Telescope to change the theme, layout, etc.
-      builtin.current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
+      builtin.current_buffer_fuzzy_find(themes.get_dropdown {
         winblend = 10,
         previewer = false,
       })

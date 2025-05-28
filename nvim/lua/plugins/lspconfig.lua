@@ -10,7 +10,16 @@ return {
     'WhoIsSethDaniel/mason-tool-installer.nvim',
 
     -- Useful status updates for LSP.
-    { 'j-hui/fidget.nvim', opts = {} },
+    {
+      'j-hui/fidget.nvim',
+      opts = {
+        notification = {
+          window = {
+            y_padding = 1,
+          },
+        },
+      },
+    },
 
     -- Allows extra capabilities provided by blink.cmp
     'saghen/blink.cmp',
@@ -257,6 +266,8 @@ return {
     })
     require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
+    local lspconfig = require 'lspconfig'
+
     require('mason-lspconfig').setup {
       ensure_installed = {}, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
       automatic_installation = false,
@@ -267,9 +278,24 @@ return {
           -- by the server configuration above. Useful when disabling
           -- certain features of an LSP (for example, turning off formatting for ts_ls)
           server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
-          require('lspconfig')[server_name].setup(server)
+          lspconfig[server_name].setup(server)
         end,
       },
     }
+
+    local non_mason_servers = {
+      kotlin_ls = {
+        cmd = { 'kotlin-lsp', '--stdio' },
+        filetypes = { 'kotlin' },
+        root_markers = { 'settings.gradle', 'settings.gradle.kts', 'pom.xml', 'build.gradle', 'build.gradle.kts', 'workspace.json' },
+      },
+    }
+
+    for server_name, server in pairs(non_mason_servers) do
+      vim.lsp.enable(server_name)
+
+      server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
+      vim.lsp.config(server_name, server)
+    end
   end,
 }
