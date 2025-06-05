@@ -17,10 +17,11 @@ return {
         group_empty = true,
       },
       filters = {
-        dotfiles = true,
+        dotfiles = false,
+        git_ignored = false,
       },
     }
 
-    vim.keymap.set('n', '<leader>e', '<cmd>NvimTreeToggle<CR>', { desc = 'File [E]xplorer]' })
+    vim.keymap.set('n', '<leader>e', '<cmd>NvimTreeToggle<CR>', { desc = 'File [E]xplorer' })
   end,
 }
