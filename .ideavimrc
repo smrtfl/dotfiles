@@ -42,7 +42,7 @@ map <Space>r <Action>(ReformatCode)
 "map \b <Action>(ToggleLineBreakpoint)
 
 " FuzzyFinder
-map <Space>ff <Action>(SearchEverywhere)
+map <Space>ff :action SearchEverywhere<CR>
 
 " Navigation
 map <C-H> <C-W>h
