@@ -94,8 +94,8 @@ vim.g.maplocalleader = ' '
 vim.g.have_nerd_font = true
 
 -- Colorscheme
-vim.cmd 'colorscheme default'
-vim.o.background = 'dark'
+-- vim.cmd 'colorscheme default'
+-- vim.o.background = 'dark'
 
 -- [[ Setting options ]]
 -- See `:help vim.o`
@@ -169,6 +169,9 @@ vim.o.scrolloff = 10
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 vim.o.confirm = true
+
+-- Enable Omni completion
+vim.o.completeopt = 'menu,menuone'
 
 -- Clear highlights on search when pressing <Esc> in normal mode
 --  See `:help hlsearch`
