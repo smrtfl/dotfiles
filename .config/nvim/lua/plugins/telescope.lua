@@ -52,6 +52,43 @@ return { -- Fuzzy Finder (files, lsp, etc)
     -- [[ Configure Telescope ]]
     -- See `:help telescope` and `:help telescope.setup()`
 
+    -- Enable absolute path
+    -- local Path = require 'plenary.path'
+    -- local devicons = require 'nvim-web-devicons'
+    -- local entry_display = require 'telescope.pickers.entry_display'
+    --
+    -- local displayer = entry_display.create {
+    --   separator = ' ',
+    --   items = {
+    --     { width = 2 }, -- Icon width
+    --     { remaining = true }, -- Path takes remaining space
+    --   },
+    -- }
+    --
+    -- local function make_display(entry)
+    --   return displayer {
+    --     { entry.icon, entry.icon_highlight },
+    --     entry.display_path,
+    --   }
+    -- end
+    --
+    -- local function file_entry_maker(entry)
+    --   local cwd = vim.fn.getcwd()
+    --   local full_path = Path:new(cwd, entry):absolute()
+    --
+    --   local icon, icon_highlight = devicons.get_icon(entry, nil, { default = true })
+    --
+    --   return {
+    --     value = full_path,
+    --     ordinal = full_path,
+    --     display = make_display,
+    --     display_path = full_path,
+    --     path = full_path,
+    --     icon = icon,
+    --     icon_highlight = icon_highlight,
+    --   }
+    -- end
+
     local file_ignore_patterns = { 'node_modules/', '.git/', '.venv', '.idea' }
 
     local telescope = require 'telescope'
@@ -75,6 +112,7 @@ return { -- Fuzzy Finder (files, lsp, etc)
         find_files = {
           file_ignore_patterns = file_ignore_patterns,
           hidden = true,
+          -- entry_maker = file_entry_maker,
         },
       },
       extensions = {

@@ -69,7 +69,7 @@ return {
         'css',
       },
       ghost_text = {
-        enabled = true, -- ghost text is an experimental feature
+        enabled = false, -- ghost text is an experimental feature
         toggle_enabled = '<M-t>',
         accept_suggestion = '<M-a>',
         clear_suggestions = '<M-c>',

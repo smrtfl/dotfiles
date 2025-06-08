@@ -223,6 +223,34 @@ vim.keymap.set('x', '<leader>p', [["_dP]])
 
 vim.keymap.set('n', '<leader>wx', ':w<CR>:Ex<CR>', { noremap = true, silent = true })
 
+function OpenFileAtLocation()
+  vim.ui.input({ prompt = 'File location: ' }, function(input)
+    if not input or input == '' then
+      return
+    end
+
+    local file, line, col = string.match(input, '^([^:]+):?(%d*):?(%d*)$')
+
+    if file then
+      file = vim.fn.expand(file)
+
+      vim.cmd(string.format('edit %s', file))
+      vim.fn.cursor(tonumber(line) or 1, tonumber(col) or 1)
+    else
+      print 'Invalid format. Use file[:line[:col]]'
+    end
+  end)
+end
+
+vim.keymap.set('n', '<leader>fl', OpenFileAtLocation, { desc = '[F]ile in [L]ocation' })
+
+vim.keymap.set('n', '<leader>tt', function()
+  vim.cmd.vnew()
+  vim.cmd.term()
+  vim.cmd.wincmd 'J'
+  vim.api.nvim_win_set_height(0, 10)
+end, { desc = '[T]oggle [T]erminal' })
+
 require './lazy'
 
 -- The line beneath this is called `modeline`. See `:help modeline`
