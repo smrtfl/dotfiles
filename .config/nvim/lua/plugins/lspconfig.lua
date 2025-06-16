@@ -245,11 +245,22 @@ return {
       helm_ls = {
         filetypes = { 'helm' },
       },
+
+      ltex = {
+        settings = {
+          ltex = {
+            -- language = 'en-US',
+            additionalRules = {
+              enablePickyRules = true,
+            },
+          },
+        },
+      },
     }
 
     local non_mason_servers = {
       kotlin_ls = {
-        cmd = { 'kotlin-lsp', '--stdio' },
+        cmd = { 'kotlin-ls', '--stdio' },
         filetypes = { 'kotlin' },
         root_markers = { 'settings.gradle', 'settings.gradle.kts', 'pom.xml', 'build.gradle', 'build.gradle.kts', 'workspace.json' },
       },
@@ -271,6 +282,7 @@ return {
     local ensure_installed = vim.tbl_keys(mason_servers or {})
     vim.list_extend(ensure_installed, {
       'stylua', -- Used to format Lua code
+      'latexindent',
     })
     require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
