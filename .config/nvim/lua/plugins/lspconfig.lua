@@ -214,7 +214,6 @@ return {
       --
       -- But for many setups, the LSP (`ts_ls`) will work just fine
       -- ts_ls = {},
-      --
 
       lua_ls = {
         -- cmd = { ... },
@@ -256,6 +255,83 @@ return {
           },
         },
       },
+
+      -- try to setup vue_ls (not working)
+      -- ts_ls = {},
+      --
+      -- vtsls = {
+      --   cmd = { 'vtsls', '--stdio' },
+      --   filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
+      --   root_markers = { 'package.json', 'tsconfig.json' },
+      --   settings = {
+      --     vtsls = {
+      --       enableMoveToFileCodeAction = true,
+      --       autoUseWorkspaceTsdk = true,
+      --       experimental = {
+      --         completion = {
+      --           enableServerSideFuzzyMatch = true,
+      --         },
+      --       },
+      --       tsserver = {
+      --         globalPlugins = {
+      --           vue_plugin = {
+      --             name = '@vue/typescript-plugin',
+      --             location = vim.fn.stdpath 'data' .. '/mason/packages/vue-language-server/node_modules/@vue/language-server',
+      --             languages = { 'vue' },
+      --             configNamespace = 'typescript',
+      --             enableForWorkspaceTypeScriptVersions = true,
+      --           },
+      --         },
+      --       },
+      --     },
+      --     typescript = {
+      --       updateImportsOnFileMove = { enabled = 'always' },
+      --       suggest = {
+      --         completeFunctionCalls = true,
+      --       },
+      --       inlayHints = {
+      --         enumMemberValues = { enabled = true },
+      --         functionLikeReturnTypes = { enabled = true },
+      --         parameterNames = { enabled = 'all' },
+      --         parameterTypes = { enabled = true },
+      --         propertyDeclarationTypes = { enabled = true },
+      --         variableTypes = { enabled = false },
+      --       },
+      --       tsserver = {
+      --         maxTsServerMemory = 8192,
+      --       },
+      --     },
+      --   },
+      -- },
+      --
+      -- vue_ls = {
+      --   cmd = { 'vue-language-server', '--stdio' },
+      --   filetypes = { 'vue' },
+      --   on_init = function(client)
+      --     client.handlers['tsserver/request'] = function(_, result, context)
+      --       local clients = vim.lsp.get_clients { bufnr = context.bufnr, name = 'vtsls' }
+      --       if #clients == 0 then
+      --         vim.notify('Could not found `vtsls` lsp client, vue_lsp would not work without it.', vim.log.levels.ERROR)
+      --         return
+      --       end
+      --       local ts_client = clients[1]
+      --
+      --       local param = unpack(result)
+      --       local id, command, payload = unpack(param)
+      --       ts_client:exec_cmd({
+      --         command = 'typescript.tsserverRequest',
+      --         arguments = {
+      --           command,
+      --           payload,
+      --         },
+      --       }, { bufnr = context.bufnr }, function(_, r)
+      --         local response_data = { { id, r.body } }
+      --         ---@diagnostic disable-next-line: param-type-mismatch
+      --         client:notify('tsserver/response', response_data)
+      --       end)
+      --     end
+      --   end,
+      -- },
     }
 
     local non_mason_servers = {
@@ -289,7 +365,7 @@ return {
     local lspconfig = require 'lspconfig'
 
     require('mason-lspconfig').setup {
-      ensure_installed = {}, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
+      ensure_installed = { 'vue_ls@3.0.0-alpha.10', 'vtsls' }, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
       automatic_installation = false,
       handlers = {
         function(server_name)
