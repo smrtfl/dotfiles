@@ -1,40 +1,14 @@
 return {
   'scalameta/nvim-metals',
   dependencies = {
+    'mfussenegger/nvim-dap',
     'nvim-lua/plenary.nvim',
     {
       'j-hui/fidget.nvim',
       opts = {},
     },
-    {
-      'mfussenegger/nvim-dap',
-      config = function(self, opts)
-        -- Debug settings if you're using nvim-dap
-        local dap = require 'dap'
-
-        dap.configurations.scala = {
-          {
-            type = 'scala',
-            request = 'launch',
-            name = 'RunOrTest',
-            metals = {
-              runType = 'runOrTestFile',
-              --args = { "firstArg", "secondArg", "thirdArg" }, -- here just as an example
-            },
-          },
-          {
-            type = 'scala',
-            request = 'launch',
-            name = 'Test Target',
-            metals = {
-              runType = 'testTarget',
-            },
-          },
-        }
-      end,
-    },
   },
-  ft = { 'scala', 'sbt', 'java' },
+  ft = { 'scala', 'sbt' }, -- 'java'?
   opts = function()
     local metals_config = require('metals').bare_config()
 
@@ -60,11 +34,15 @@ return {
 
     metals_config.on_attach = function(client, bufnr)
       require('metals').setup_dap()
-
-      vim.keymap.set('n', '<leader>ws', function()
-        require('metals').hover_worksheet()
-      end)
     end
+
+    vim.keymap.set('n', '<leader>mw', function()
+      require('metals').hover_worksheet()
+    end, { desc = '[M]etals [W]orksheet' })
+
+    vim.keymap.set('n', '<leader>mc', function()
+      require('telescope').extensions.metals.commands()
+    end, { desc = '[M]etals [C]ommands' })
 
     return metals_config
   end,

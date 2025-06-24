@@ -161,5 +161,33 @@ return { -- Fuzzy Finder (files, lsp, etc)
     vim.keymap.set('n', '<leader>fn', function()
       builtin.find_files { cwd = vim.fn.stdpath 'config' }
     end, { desc = '[F]ind [N]eovim files' })
+
+    -- Harpoon extensions
+    local harpoon = require 'harpoon'
+    harpoon:setup {}
+
+    local conf = require('telescope.config').values
+    local function toggle_telescope(harpoon_files)
+      local file_paths = {}
+      for _, item in ipairs(harpoon_files.items) do
+        table.insert(file_paths, item.value)
+      end
+
+      require('telescope.pickers')
+        .new({}, {
+          prompt_title = 'Harpoon Marks',
+          finder = require('telescope.finders').new_table {
+            results = file_paths,
+          },
+          previewer = conf.file_previewer {},
+          sorter = conf.generic_sorter {},
+        })
+        :find()
+    end
+
+    vim.keymap.set('n', '<leader>fm', function()
+      toggle_telescope(harpoon:list())
+    end, { desc = '[F]ind Harpoon [M]arks' })
+    -- vim.keymap.set('n', '<leader>fm', '<cmd>Telescope harpoon marks<CR>', { desc = '[F]ind Harpoon [M]arks' })
   end,
 }

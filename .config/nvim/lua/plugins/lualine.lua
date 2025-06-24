@@ -16,7 +16,9 @@ return {
       local active_client = {}
 
       for _, client in pairs(clients) do
-        table.insert(active_client, client.name)
+        if vim.lsp.buf_is_attached(vim.api.nvim_get_current_buf(), client.id) then
+          table.insert(active_client, client.name)
+        end
       end
 
       return ' ' .. table.concat(active_client, ' | ')

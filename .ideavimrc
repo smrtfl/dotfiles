@@ -33,7 +33,7 @@ Plug 'tpope/vim-commentary'
 
 "" -- Map IDE actions to IdeaVim -- https://jb.gg/abva4t
 "" Map \r to the Reformat Code action
-map <Space>r <Action>(ReformatCode)
+map <Space>fc <Action>(ReformatCode)
 
 "" Map <leader>d to start debug
 "map <leader>d <Action>(Debug)
@@ -42,7 +42,8 @@ map <Space>r <Action>(ReformatCode)
 "map \b <Action>(ToggleLineBreakpoint)
 
 " FuzzyFinder
-map <Space>ff :action SearchEverywhere<CR>
+map <Space>ff :action GotoFile<CR>
+map <Space>fg :action SearchEverywhere<CR>
 
 " Navigation
 map <C-H> <C-W>h
@@ -68,6 +69,23 @@ map <Space>gb :action Annotate<CR>
 
 " LSP
 map gr :action GotoDeclaration<CR>
+map gd :action GotoDeclaration<CR>
+map gI :action GotoImplementation<CR>
 map <C-W><C-D> :action ShowErrorDescription<CR>
 map <C-W>d :action ShowErrorDescription<CR>
 map <Space>rn :action RenameElement<CR>
+map <Space>ca :action ShowIntentionActions<CR>
+
+" Harpoon
+map <Space>hh :action ShowHarpoon<CR>
+map <Space>ha :action AddToHarpoon<CR>
+map <M-1> :action GotoHarpoon1<CR>
+map <M-2> :action GotoHarpoon2<CR>
+map <M-3> :action GotoHarpoon3<CR>
+map <M-4> :action GotoHarpoon4<CR>
+map <M-5> :action GotoHarpoon5<CR>
+map <M-i> :action NextHarpoonItem<CR>
+map <M-o> :action PreviousHarpoonItem<CR>
+
+" Explorer
+map <Space>fe :action SelectIn<CR>

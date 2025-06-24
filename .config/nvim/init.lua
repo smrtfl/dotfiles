@@ -170,9 +170,6 @@ vim.o.scrolloff = 10
 --  See `:help vim.keymap.set()`
 vim.o.confirm = true
 
--- Enable Omni completion
-vim.o.completeopt = 'menu,menuone'
-
 -- Clear highlights on search when pressing <Esc> in normal mode
 --  See `:help hlsearch`
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
