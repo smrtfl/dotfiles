@@ -88,4 +88,5 @@ map <M-i> :action NextHarpoonItem<CR>
 map <M-o> :action PreviousHarpoonItem<CR>
 
 " Explorer
+map <Space>e :action ActivateProjectToolWindow<CR>
 map <Space>fe :action SelectIn<CR>

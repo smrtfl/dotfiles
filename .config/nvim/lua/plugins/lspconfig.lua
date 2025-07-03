@@ -246,7 +246,6 @@ return {
       },
 
       ltex = {
-        filetypes = { 'latex' },
         settings = {
           ltex = {
             -- language = 'en-US',
