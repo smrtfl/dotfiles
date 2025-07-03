@@ -1,25 +1,29 @@
 -- File Location
 function OpenFileAtLocation()
   vim.ui.input({ prompt = 'File location: ' }, function(input)
-    if not input or input == '' then
+    local file, line, col = string.match(input or '', '^(.-):?(%d*):?(%d*)$')
+
+    file = file ~= '' and file or nil
+    line = line ~= '' and tonumber(line) or nil
+    col = col ~= '' and tonumber(col) or nil
+
+    if not file and not line and not col then
+      print 'Invalid format. Use file:line:col'
       return
     end
 
-    local file, line, col = string.match(input, '^([^:]+):?(%d*):?(%d*)$')
-
     if file then
       file = vim.fn.expand(file)
-
-      vim.cmd(string.format('edit %s', file))
-      vim.fn.cursor(tonumber(line) or 1, tonumber(col) or 1)
-    else
-      print 'Invalid format. Use file[:line[:col]]'
+      vim.cmd.edit(file)
     end
+
+    vim.fn.cursor(line or 1, col or 1)
   end)
 end
 
 vim.keymap.set('n', '<leader>fl', OpenFileAtLocation, { desc = '[F]ile in [L]ocation' })
 
+-- Terminal
 vim.keymap.set('n', '<leader>tt', function()
   vim.cmd.vnew()
   vim.cmd.term()
