@@ -1,27 +1,27 @@
 local fg = '#00ff00'
 local bg = '#000000'
-local override_enabled = false
-
-local telescope_groups = {
-  'TelescopePromptPrefix',
-  'TelescopePromptNormal',
-  'TelescopePromptTitle',
-  'TelescopePromptBorder',
-  'TelescopeResultsTitle',
-  'TelescopeResultsNormal',
-  'TelescopeResultsBorder',
-  'TelescopePreviewTitle',
-  'TelescopePreviewNormal',
-  'TelescopePreviewBorder',
-}
+local matrix_enabled = false
 
 local function override_telescope()
+  local telescope_groups = {
+    'TelescopePromptPrefix',
+    'TelescopePromptNormal',
+    'TelescopePromptTitle',
+    'TelescopePromptBorder',
+    'TelescopeResultsTitle',
+    'TelescopeResultsNormal',
+    'TelescopeResultsBorder',
+    'TelescopePreviewTitle',
+    'TelescopePreviewNormal',
+    'TelescopePreviewBorder',
+  }
+
   for _, group in ipairs(telescope_groups) do
     vim.api.nvim_set_hl(0, group, { fg = fg, bg = bg })
   end
 end
 
-local function OverrideColors()
+local function override_colors()
   for name, attrs in pairs(vim.api.nvim_get_hl(0, {})) do
     local new_attrs = vim.tbl_extend('force', {}, attrs)
     if new_attrs.fg then
@@ -40,7 +40,7 @@ local function OverrideColors()
   override_telescope()
 end
 
-local function ResetColors()
+local function reset_colors()
   vim.cmd 'highlight clear'
   vim.cmd 'colorscheme default'
   require('lualine').setup {
@@ -51,11 +51,11 @@ local function ResetColors()
   require('onedark').load()
 end
 
-local function EnableOverride()
+local function enable_matrix()
   vim.cmd 'highlight clear'
 
-  override_enabled = true
-  OverrideColors()
+  matrix_enabled = true
+  override_colors()
   require('lualine').setup {
     options = {
       theme = {
@@ -68,28 +68,30 @@ local function EnableOverride()
       },
     },
   }
+  require('ibl').setup { enabled = false }
   print 'Color override enabled'
 end
 
-local function DisableOverride()
-  override_enabled = false
-  ResetColors()
+local function disable_matrix()
+  matrix_enabled = false
+  reset_colors()
+  require('ibl').setup { enabled = false }
   print 'Color override disabled'
 end
 
-local function ToggleOverride()
-  if override_enabled then
-    DisableOverride()
+local function toggle_matrix()
+  if matrix_enabled then
+    disable_matrix()
   else
-    EnableOverride()
+    enable_matrix()
   end
 end
 
 vim.api.nvim_create_autocmd('ColorScheme', {
   pattern = '*',
   callback = function()
-    if override_enabled then
-      vim.schedule(OverrideColors)
+    if matrix_enabled then
+      vim.schedule(override_colors)
     end
   end,
 })
@@ -97,12 +99,12 @@ vim.api.nvim_create_autocmd('ColorScheme', {
 vim.api.nvim_create_autocmd('User', {
   pattern = 'TelescopeLoad',
   callback = function()
-    if override_enabled then
-      OverrideColors()
+    if matrix_enabled then
+      override_colors()
     end
   end,
 })
 
-vim.api.nvim_set_keymap('n', '<leader>m', '<cmd>lua ToggleOverride()<CR>', { desc = '[M]atrix', noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>x', '<cmd>lua ToggleMatrix()<CR>', { desc = 'Matri[X]', noremap = true, silent = true })
 
-_G.ToggleOverride = ToggleOverride
+_G.ToggleMatrix = toggle_matrix

@@ -20,9 +20,6 @@ return {
         },
       },
     },
-
-    -- Allows extra capabilities provided by blink.cmp
-    'saghen/blink.cmp',
   },
   config = function()
     -- Brief aside: **What is LSP?**
@@ -191,7 +188,7 @@ return {
     --  By default, Neovim doesn't support everything that is in the LSP specification.
     --  When you add blink.cmp, luasnip, etc. Neovim now has *more* capabilities.
     --  So, we create new capabilities with blink.cmp, and then broadcast that to the servers.
-    local capabilities = require('blink.cmp').get_lsp_capabilities()
+    local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
     -- Enable the following language servers
     --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
@@ -216,11 +213,18 @@ return {
       -- ts_ls = {},
 
       lua_ls = {
-        -- cmd = { ... },
-        -- filetypes = { ... },
-        -- capabilities = {},
+        cmd = { 'lua-language-server' },
+        filetypes = { 'lua' },
+        root_dir = function(startpath)
+          local git_dir = vim.fs.find('.git', { path = startpath, upward = true })[1]
+          return git_dir and vim.fs.dirname(git_dir) or vim.loop.cwd()
+        end,
         settings = {
           Lua = {
+            diagnostics = {
+              disable = { 'missing-fields' },
+              globals = { 'vim' }, -- Get the language server to recognize the `vim` global
+            },
             completion = {
               callSnippet = 'Replace',
             },

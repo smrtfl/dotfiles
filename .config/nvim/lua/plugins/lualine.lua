@@ -34,8 +34,10 @@ return {
       },
       sections = {
         lualine_a = {
-          'mode',
-          padding = { left = 0, right = 1 },
+          {
+            'mode',
+            padding = { left = 1, right = 1 },
+          },
         },
         lualine_b = {
           {
@@ -61,7 +63,7 @@ return {
           {
             'diff',
             symbols = { added = ' ', modified = ' ', removed = ' ' },
-            colored = false,
+            colored = true,
           },
         },
         lualine_x = {
@@ -73,7 +75,7 @@ return {
         },
         lualine_y = { clients_lsp },
         lualine_z = {
-          { 'location', icon = '' },
+          { 'location' },
         },
       },
       inactive_sections = {
