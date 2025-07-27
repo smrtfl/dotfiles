@@ -8,7 +8,7 @@ function OpenFileAtLocation()
     col = col ~= '' and tonumber(col) or nil
 
     if not file and not line and not col then
-      print 'Invalid format. Use file:line:col'
+      print 'Invalid format. Use [file][:line[:col]]'
       return
     end
 

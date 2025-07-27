@@ -111,5 +111,12 @@ return { -- Autocompletion
         { name = 'path' },
       },
     }
+
+    cmp.setup.filetype('tex', {
+      sources = {
+        { name = 'vimtex' },
+        { name = 'buffer' },
+      },
+    })
   end,
 }

@@ -33,12 +33,14 @@ return {
         disabled_filetypes = {},
       },
       sections = {
-        lualine_a = { 'mode' },
+        lualine_a = {
+          'mode',
+          padding = { left = 0, right = 1 },
+        },
         lualine_b = {
           {
             'filetype',
             icon_only = true,
-            padding = { left = 1, right = 0 },
           },
           {
             'filename',

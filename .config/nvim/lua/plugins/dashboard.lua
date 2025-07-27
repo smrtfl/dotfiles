@@ -92,4 +92,12 @@ return {
 
     return opts
   end,
+  config = function()
+    vim.api.nvim_create_autocmd('FileType', {
+      pattern = 'dashboard',
+      callback = function()
+        vim.opt_local.fillchars:append { eob = ' ' }
+      end,
+    })
+  end,
 }

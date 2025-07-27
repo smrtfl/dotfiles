@@ -364,7 +364,10 @@ return {
     local lspconfig = require 'lspconfig'
 
     require('mason-lspconfig').setup {
-      ensure_installed = { 'vue_ls@3.0.0-alpha.10', 'vtsls' }, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
+      ensure_installed = {
+        -- 'vue_ls@3.0.0-alpha.10',
+        -- 'vtsls',
+      }, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
       automatic_installation = false,
       handlers = {
         function(server_name)

@@ -1,9 +1,8 @@
 return {
   'lervag/vimtex',
-  lazy = false,
   -- tag = "v2.15", -- uncomment to pin to a specific release
+  lazy = false,
   init = function()
-    -- VimTeX configuration
     vim.g.vimtex_view_method = 'skim'
     vim.g.vimtex_compiler_method = 'latexmk'
     vim.g.vimtex_compiler_latexmk = {
@@ -13,12 +12,15 @@ return {
       continuous = 1,
       executable = 'latexmk',
       options = {
-        '-pdf',
         '-xelatex',
         '-interaction=nonstopmode',
         '-synctex=1',
         '-pvc',
       },
+    }
+
+    vim.g.vimtex_compiler_latexmk_engines = {
+      ['_'] = '-xelatex',
     }
   end,
 }
