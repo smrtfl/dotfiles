@@ -253,6 +253,7 @@ return {
         settings = {
           ltex = {
             -- language = 'en-US',
+            -- language = 'de-DE',
             additionalRules = {
               enablePickyRules = true,
             },
