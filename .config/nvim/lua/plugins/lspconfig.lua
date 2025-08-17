@@ -253,7 +253,6 @@ return {
         settings = {
           ltex = {
             -- language = 'en-US',
-            -- language = 'de-DE',
             additionalRules = {
               enablePickyRules = true,
             },
@@ -363,16 +362,14 @@ return {
     local ensure_installed = vim.tbl_keys(mason_servers or {})
     vim.list_extend(ensure_installed, {
       'stylua', -- Used to format Lua code
+      -- 'vue_ls@3.0.0-alpha.10',
+      -- 'vtsls',
     })
     require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
     local lspconfig = require 'lspconfig'
 
     require('mason-lspconfig').setup {
-      ensure_installed = {
-        -- 'vue_ls@3.0.0-alpha.10',
-        -- 'vtsls',
-      }, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
       automatic_installation = false,
       handlers = {
         function(server_name)

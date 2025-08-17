@@ -185,9 +185,8 @@ return { -- Fuzzy Finder (files, lsp, etc)
         :find()
     end
 
-    vim.keymap.set('n', '<leader>fm', function()
+    vim.keymap.set('n', '<leader>hm', function()
       toggle_telescope(harpoon:list())
-    end, { desc = '[F]ind Harpoon [M]arks' })
-    -- vim.keymap.set('n', '<leader>fm', '<cmd>Telescope harpoon marks<CR>', { desc = '[F]ind Harpoon [M]arks' })
+    end, { desc = '[H]arpoon [M]arks' })
   end,
 }

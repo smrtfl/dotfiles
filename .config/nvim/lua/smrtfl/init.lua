@@ -1,6 +1,6 @@
 -- File Location
 function OpenFileAtLocation()
-  vim.ui.input({ prompt = 'File location: ' }, function(input)
+  vim.ui.input({ prompt = 'File at location: ' }, function(input)
     local file, line, col = string.match(input or '', '^(.-):?(%d*):?(%d*)$')
 
     file = file ~= '' and file or nil
@@ -30,6 +30,25 @@ vim.keymap.set('n', '<leader>tt', function()
   vim.cmd.wincmd 'J'
   vim.api.nvim_win_set_height(0, 15)
 end, { desc = '[T]oggle [T]erminal' })
+
+-- LTeX
+vim.api.nvim_create_user_command('LtexLang', function(opts)
+  for _, client in ipairs(vim.lsp.get_clients { name = 'ltex' }) do
+    client.config.settings = client.config.settings or {}
+    client.config.settings.ltex = client.config.settings.ltex or {}
+    client.config.settings.ltex.language = opts.args
+
+    -- Notify the server about the new settings
+    client:notify('workspace/didChangeConfiguration', {
+      settings = client.config.settings,
+    })
+  end
+end, {
+  nargs = 1,
+  complete = function()
+    return { 'en-US', 'de-DE' }
+  end,
+})
 
 -- TODO: remove
 -- IHK Berichtsheft
