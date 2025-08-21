@@ -31,6 +31,7 @@ return {
     -- vim.keymap.set('n', '<leader>gl', ':Git pull <CR>', { noremap = true, desc = '[G]it [P]ull' })
     -- vim.keymap.set('n', '<leader>gp', ':Git push --quiet <CR>', { noremap = true, desc = '[G]it [P]ush' })
     -- vim.keymap.set('n', '<leader>gc', ':Git commit -qam "', { noremap = true, desc = 'git commit -am' })
-    -- vim.keymap.set('n', '<leader>gb', ':Git blame', { noremap = true, desc = 'git commit -am' })
+
+    vim.keymap.set('n', '<leader>gb', ':Git blame<CR>', { noremap = true, desc = 'git commit -am' })
   end,
 }

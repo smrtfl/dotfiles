@@ -28,7 +28,7 @@ return {
       options = {
         icons_enabled = true,
         theme = 'onedark',
-        section_separators = { left = '', right = '' },
+        section_separators = { left = ' ', right = '' },
         component_separators = { left = '', right = '' },
         disabled_filetypes = {},
       },
@@ -43,7 +43,7 @@ return {
           {
             'filetype',
             icon_only = true,
-            padding = { left = 1, right = 0 },
+            padding = { left = 0, right = 0 },
           },
           {
             'filename',

@@ -89,7 +89,7 @@ return { -- Fuzzy Finder (files, lsp, etc)
     --   }
     -- end
 
-    local file_ignore_patterns = { 'node_modules/', '.git/', '.venv/', '.idea/' }
+    local file_ignore_patterns = { 'node_modules/', '.git/', '.venv/', '.idea/', '.metals/', '.bloop/' }
 
     local telescope = require 'telescope'
     local themes = require 'telescope.themes'
@@ -162,7 +162,7 @@ return { -- Fuzzy Finder (files, lsp, etc)
       builtin.find_files { cwd = vim.fn.stdpath 'config' }
     end, { desc = '[F]ind [N]eovim files' })
 
-    -- Harpoon extensions
+    -- Harpoon extension
     local harpoon = require 'harpoon'
     harpoon:setup {}
 
@@ -188,5 +188,8 @@ return { -- Fuzzy Finder (files, lsp, etc)
     vim.keymap.set('n', '<leader>hm', function()
       toggle_telescope(harpoon:list())
     end, { desc = '[H]arpoon [M]arks' })
+
+    -- Rest extension
+    telescope.load_extension 'rest'
   end,
 }

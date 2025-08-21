@@ -245,6 +245,8 @@ return {
         end,
       },
 
+      marksman = {},
+
       helm_ls = {
         filetypes = { 'helm' },
       },
@@ -362,6 +364,8 @@ return {
     local ensure_installed = vim.tbl_keys(mason_servers or {})
     vim.list_extend(ensure_installed, {
       'stylua', -- Used to format Lua code
+      'markdownlint',
+      'ltex',
       -- 'vue_ls@3.0.0-alpha.10',
       -- 'vtsls',
     })
