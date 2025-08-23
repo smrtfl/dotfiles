@@ -51,8 +51,55 @@ end, {
 })
 
 -- TODO: remove
--- IHK Berichtsheft
-function ParseIhkBerichtsheft()
+-- IHK reports
+local function MakeIhkReport()
+  local now = os.date '*t'
+
+  local days_since_monday = (now.wday == 1) and 6 or (now.wday - 2)
+  local days_until_sunday = (now.wday == 1) and 0 or (8 - now.wday)
+
+  local monday_time = os.time { year = now.year, month = now.month, day = now.day - days_since_monday }
+  local sunday_time = os.time { year = now.year, month = now.month, day = now.day + days_until_sunday }
+
+  local monday_str = os.date('%d-%m-%y', monday_time)
+  local sunday_str = os.date('%d-%m-%y', sunday_time)
+  local year_str = os.date('%Y', now.year)
+  local month_str = os.date('%B', os.time(now)):lower()
+
+  local base_dir = 'reports'
+  local template_filename = 'template.md'
+  local template_filepath = string.format('%s/%s', base_dir, template_filename)
+
+  local report_dir = string.format('%s/%s/%s', base_dir, year_str, month_str)
+  local report_filename = string.format('%s_%s.md', monday_str, sunday_str)
+  local report_filepath = string.format('%s/%s', report_dir, report_filename)
+
+  if vim.fn.filereadable(template_filepath) ~= 0 then
+    print 'Report already exists'
+    return
+  end
+
+  if vim.fn.filereadable(template_filepath) == 0 then
+    print 'Template not found'
+    return
+  end
+
+  print(report_filepath)
+
+  -- vim.fn.mkdir(report_dir, 'p')
+  --
+  -- vim.fn.writefile(vim.fn.readfile(template_filepath), report_filepath)
+  --
+  -- local lines = vim.fn.readfile(report_filepath)
+  -- lines[1] = string.format('# %s - %s', monday_str:sub('-', '.'), sunday_str:sub('-', '.'))
+  -- vim.fn.writefile(lines, report_filepath)
+  --
+  -- vim.cmd('edit ' .. report_filepath)
+end
+
+vim.keymap.set('n', '<leader>mr', MakeIhkReport, { desc = '[M]ake IHK [R]eport' })
+
+function ParseIhkReport()
   function ParseMarkdown(md)
     local parsed = md:gsub('^#+ ', ''):gsub('%*%*(.-)%*%*', '%1'):gsub('%*(.-)%*', '%1'):gsub('__(.-)__', '%1'):gsub('_(.-)_', '%1'):gsub('`(.-)`', '%1')
     return parsed
@@ -69,13 +116,12 @@ function ParseIhkBerichtsheft()
   while i <= #lines do
     local line = lines[i]
 
-    if line:match '^### .+' and i < #lines - 1 then
-      local merged = lines[i + 1]:match '^---[- ]*$' and line or table.concat({ line, lines[i + 1] }, '\n')
-
-      table.insert(result, ParseMarkdown(merged))
-
+    if line:match '^#+ ' then
       i = i + 1
-    elseif not line:match '^---[- ]*$' then
+    elseif line:match '^%*%*' then
+      table.insert(result, ParseMarkdown(line))
+      i = i + 1
+    else
       table.insert(result, ParseMarkdown(line))
     end
 
@@ -85,4 +131,4 @@ function ParseIhkBerichtsheft()
   vim.fn.setreg('+', table.concat(result, '\n'))
 end
 
-vim.keymap.set('n', '<leader>pi', ParseIhkBerichtsheft, { desc = '[P]arse [I]HK' })
+vim.keymap.set('n', '<leader>pr', ParseIhkReport, { desc = '[P]arse IHK [R]eport' })
