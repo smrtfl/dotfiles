@@ -29,6 +29,7 @@ vim.keymap.set('n', '<leader>tt', function()
   vim.cmd.term()
   vim.cmd.wincmd 'J'
   vim.api.nvim_win_set_height(0, 15)
+  vim.api.nvim_win_set_option(0, 'winfixheight', true)
 end, { desc = '[T]oggle [T]erminal' })
 
 -- LTeX
@@ -86,15 +87,15 @@ local function MakeIhkReport()
 
   print(report_filepath)
 
-  -- vim.fn.mkdir(report_dir, 'p')
-  --
-  -- vim.fn.writefile(vim.fn.readfile(template_filepath), report_filepath)
-  --
-  -- local lines = vim.fn.readfile(report_filepath)
-  -- lines[1] = string.format('# %s - %s', monday_str:sub('-', '.'), sunday_str:sub('-', '.'))
-  -- vim.fn.writefile(lines, report_filepath)
-  --
-  -- vim.cmd('edit ' .. report_filepath)
+  vim.fn.mkdir(report_dir, 'p')
+
+  vim.fn.writefile(vim.fn.readfile(template_filepath), report_filepath)
+
+  local lines = vim.fn.readfile(report_filepath)
+  lines[1] = string.format('# %s - %s', monday_str:sub('-', '.'), sunday_str:sub('-', '.'))
+  vim.fn.writefile(lines, report_filepath)
+
+  vim.cmd('edit ' .. report_filepath)
 end
 
 vim.keymap.set('n', '<leader>mr', MakeIhkReport, { desc = '[M]ake IHK [R]eport' })

@@ -1,39 +1,11 @@
 return {
   'scalameta/nvim-metals',
   dependencies = {
-    'nvim-lua/plenary.nvim',
-    {
-      'mfussenegger/nvim-dap',
-      config = function(self, opts)
-        -- Debug settings if you're using nvim-dap
-        local dap = require 'dap'
-
-        dap.configurations.scala = {
-          {
-            type = 'scala',
-            request = 'launch',
-            name = 'RunOrTest',
-            metals = {
-              runType = 'runOrTestFile',
-              --args = { "firstArg", "secondArg", "thirdArg" }, -- here just as an example
-            },
-          },
-          {
-            type = 'scala',
-            request = 'launch',
-            name = 'Test Target',
-            metals = {
-              runType = 'testTarget',
-            },
-          },
-        }
-      end,
-    },
-    'rcarriga/nvim-dap-ui',
     {
       'j-hui/fidget.nvim',
       opts = {},
     },
+    'mfussenegger/nvim-dap',
   },
   ft = { 'scala', 'sbt' }, -- 'java'?
   opts = function()
@@ -61,7 +33,6 @@ return {
 
     metals_config.on_attach = function(client, bufnr)
       require('metals').setup_dap()
-      require('dapui').setup()
     end
 
     vim.keymap.set('n', '<leader>mw', function()
@@ -71,35 +42,6 @@ return {
     vim.keymap.set('n', '<leader>mc', function()
       require('telescope').extensions.metals.commands()
     end, { desc = '[M]etals [C]ommands' })
-
-    -- DAP
-    vim.keymap.set('n', '<leader>dc', function()
-      require('dap').continue()
-    end)
-
-    vim.keymap.set('n', '<leader>dr', function()
-      require('dap').repl.toggle()
-    end)
-
-    vim.keymap.set('n', '<leader>dK', function()
-      require('dap.ui.widgets').hover()
-    end)
-
-    vim.keymap.set('n', '<leader>dt', function()
-      require('dap').toggle_breakpoint()
-    end)
-
-    vim.keymap.set('n', '<leader>dso', function()
-      require('dap').step_over()
-    end)
-
-    vim.keymap.set('n', '<leader>dsi', function()
-      require('dap').step_into()
-    end)
-
-    vim.keymap.set('n', '<leader>dl', function()
-      require('dap').run_last()
-    end)
 
     return metals_config
   end,

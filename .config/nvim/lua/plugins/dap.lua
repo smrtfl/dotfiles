@@ -1,81 +1,10 @@
--- debug.lua
---
--- Shows how to use the DAP plugin to debug your code.
---
--- Primarily focused on configuring the debugger for Go, but can
--- be extended to other languages as well. That's why it's called
--- kickstart.nvim and not kitchen-sink.nvim ;)
-
 return {
-  -- NOTE: Yes, you can install new plugins here!
   'mfussenegger/nvim-dap',
-  -- NOTE: And you can specify dependencies as well
   dependencies = {
-    -- Creates a beautiful debugger UI
     'rcarriga/nvim-dap-ui',
-
-    -- Required dependency for nvim-dap-ui
     'nvim-neotest/nvim-nio',
-
-    -- Installs the debug adapters for you
     'williamboman/mason.nvim',
     'jay-babu/mason-nvim-dap.nvim',
-
-    -- Add your own debuggers here
-    'leoluz/nvim-dap-go',
-  },
-  keys = {
-    -- Basic debugging keymaps, feel free to change to your liking!
-    {
-      '<F5>',
-      function()
-        require('dap').continue()
-      end,
-      desc = 'Debug: Start/Continue',
-    },
-    {
-      '<F1>',
-      function()
-        require('dap').step_into()
-      end,
-      desc = 'Debug: Step Into',
-    },
-    {
-      '<F2>',
-      function()
-        require('dap').step_over()
-      end,
-      desc = 'Debug: Step Over',
-    },
-    {
-      '<F3>',
-      function()
-        require('dap').step_out()
-      end,
-      desc = 'Debug: Step Out',
-    },
-    {
-      '<leader>b',
-      function()
-        require('dap').toggle_breakpoint()
-      end,
-      desc = 'Debug: Toggle Breakpoint',
-    },
-    {
-      '<leader>B',
-      function()
-        require('dap').set_breakpoint(vim.fn.input 'Breakpoint condition: ')
-      end,
-      desc = 'Debug: Set Breakpoint',
-    },
-    -- Toggle to see last session result. Without this, you can't see session output in case of unhandled exception.
-    {
-      '<F7>',
-      function()
-        require('dapui').toggle()
-      end,
-      desc = 'Debug: See last session result.',
-    },
   },
   config = function()
     local dap = require 'dap'
@@ -98,52 +27,138 @@ return {
       },
     }
 
+    vim.keymap.set('n', '<leader>du', function()
+      dapui.toggle()
+    end, { desc = '[D]AP [U]I' })
+
+    vim.keymap.set('n', '<leader>db', function()
+      dap.toggle_breakpoint()
+    end, { desc = '[D]AP [B]reakpoint' })
+
+    vim.keymap.set('n', '<leader>dc', function()
+      dap.continue()
+    end, { desc = '[D]AP [C]ontinue' })
+
+    vim.keymap.set('n', '<leader>dr', function()
+      dap.repl.toggle()
+    end, { desc = '[D]AP [R]EPL' })
+
+    vim.keymap.set('n', '<leader>dK', function()
+      require('dap.ui.widgets').hover()
+    end, { desc = '[D]AP hover' })
+
+    vim.keymap.set('n', '<leader>dso', function()
+      dap.step_over()
+    end, { desc = '[D]AP [S]tep [O]ver' })
+
+    vim.keymap.set('n', '<leader>dsi', function()
+      dap.step_into()
+    end, { desc = '[D]AP [S]tep [I]nto' })
+
+    vim.keymap.set('n', '<leader>dl', function()
+      dap.run_last()
+    end, { desc = '[D]AP run [L]ast' })
+
     -- Dap UI setup
     -- For more information, see |:help nvim-dap-ui|
-    dapui.setup {
-      -- Set icons to characters that are more likely to work in every terminal.
-      --    Feel free to remove or use ones that you like more! :)
-      --    Don't feel like these are good choices.
-      icons = { expanded = '▾', collapsed = '▸', current_frame = '*' },
-      controls = {
-        icons = {
-          pause = '⏸',
-          play = '▶',
-          step_into = '⏎',
-          step_over = '⏭',
-          step_out = '⏮',
-          step_back = 'b',
-          run_last = '▶▶',
-          terminate = '⏹',
-          disconnect = '⏏',
-        },
+    dapui.setup()
+    -- dapui.setup {
+    --   -- Set icons to characters that are more likely to work in every terminal.
+    --   --    Feel free to remove or use ones that you like more! :)
+    --   --    Don't feel like these are good choices.
+    --   icons = { expanded = '▾', collapsed = '▸', current_frame = '*' },
+    --   controls = {
+    --     icons = {
+    --       pause = '⏸',
+    --       play = '▶',
+    --       step_into = '⏎',
+    --       step_over = '⏭',
+    --       step_out = '⏮',
+    --       step_back = 'b',
+    --       run_last = '▶▶',
+    --       terminate = '⏹',
+    --       disconnect = '⏏',
+    --     },
+    --   },
+    -- }
+
+    -- Change breakpoint icons
+    vim.api.nvim_set_hl(0, 'DapBreak', { fg = '#e51400' })
+    vim.api.nvim_set_hl(0, 'DapStop', { fg = '#ffcc00' })
+    local breakpoint_icons = vim.g.have_nerd_font
+        and { Breakpoint = '', BreakpointCondition = '', BreakpointRejected = '', LogPoint = '', Stopped = '' }
+      or { Breakpoint = '●', BreakpointCondition = '⊜', BreakpointRejected = '⊘', LogPoint = '◆', Stopped = '⭔' }
+    for type, icon in pairs(breakpoint_icons) do
+      local tp = 'Dap' .. type
+      local hl = (type == 'Stopped') and 'DapStop' or 'DapBreak'
+      vim.fn.sign_define(tp, { text = icon, texthl = hl, numhl = hl })
+    end
+
+    dap.listeners.before.attach.dapui_config = function()
+      dapui.open()
+    end
+
+    dap.listeners.before.launch.dapui_config = function()
+      dapui.open()
+    end
+
+    dap.listeners.before.event_terminated.dapui_config = function()
+      dapui.close()
+    end
+
+    dap.listeners.before.event_exited.dapui_config = function()
+      dapui.close()
+    end
+
+    -- Kotlin
+    dap.adapters.kotlin = {
+      type = 'executable',
+      command = 'kotlin-debug-adapter',
+      options = { auto_continue_if_many_stopped = false },
+    }
+
+    dap.configurations.kotlin = {
+      {
+        type = 'kotlin',
+        request = 'launch',
+        name = 'This file',
+        -- may differ, when in doubt, whatever your project structure may be,
+        -- it has to correspond to the class file located at `build/classes/`
+        -- and of course you have to build before you debug
+        mainClass = function()
+          local root = vim.fs.find('src', { path = vim.uv.cwd(), upward = true, stop = vim.env.HOME })[1] or ''
+          local fname = vim.api.nvim_buf_get_name(0)
+          -- src/main/kotlin/websearch/Main.kt -> websearch.MainKt
+          return fname:gsub(root, ''):gsub('main/kotlin/', ''):gsub('.kt', 'Kt'):gsub('/', '.'):sub(2, -1)
+        end,
+        projectRoot = '${workspaceFolder}',
+        jsonLogFile = '',
+        enableJsonLogging = false,
+      },
+      {
+        -- Use this for unit tests
+        -- First, run
+        -- ./gradlew --info cleanTest test --debug-jvm
+        -- then attach the debugger to it
+        type = 'kotlin',
+        request = 'attach',
+        name = 'Attach to debugging session',
+        port = 5005,
+        args = {},
+        projectRoot = vim.fn.getcwd,
+        hostName = 'localhost',
+        timeout = 2000,
       },
     }
 
-    -- Change breakpoint icons
-    -- vim.api.nvim_set_hl(0, 'DapBreak', { fg = '#e51400' })
-    -- vim.api.nvim_set_hl(0, 'DapStop', { fg = '#ffcc00' })
-    -- local breakpoint_icons = vim.g.have_nerd_font
-    --     and { Breakpoint = '', BreakpointCondition = '', BreakpointRejected = '', LogPoint = '', Stopped = '' }
-    --   or { Breakpoint = '●', BreakpointCondition = '⊜', BreakpointRejected = '⊘', LogPoint = '◆', Stopped = '⭔' }
-    -- for type, icon in pairs(breakpoint_icons) do
-    --   local tp = 'Dap' .. type
-    --   local hl = (type == 'Stopped') and 'DapStop' or 'DapBreak'
-    --   vim.fn.sign_define(tp, { text = icon, texthl = hl, numhl = hl })
-    -- end
-
-    dap.listeners.after.event_initialized['dapui_config'] = dapui.open
-    dap.listeners.before.event_terminated['dapui_config'] = dapui.close
-    dap.listeners.before.event_exited['dapui_config'] = dapui.close
-
+    -- Scala
     dap.configurations.scala = {
       {
         type = 'scala',
         request = 'launch',
-        name = 'RunOrTest',
+        name = 'Run or Test',
         metals = {
           runType = 'runOrTestFile',
-          --args = { "firstArg", "secondArg", "thirdArg" }, -- here just as an example
         },
       },
       {
@@ -154,14 +169,13 @@ return {
           runType = 'testTarget',
         },
       },
-    }
-
-    -- Install golang specific config
-    require('dap-go').setup {
-      delve = {
-        -- On Windows delve must be run attached or it crashes.
-        -- See https://github.com/leoluz/nvim-dap-go/blob/main/README.md#configuring
-        detached = vim.fn.has 'win32' == 0,
+      {
+        type = 'scala',
+        request = 'attach',
+        name = 'Attach to Localhost',
+        hostName = 'localhost',
+        port = 5005,
+        buildTarget = 'root',
       },
     }
   end,
