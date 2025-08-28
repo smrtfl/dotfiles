@@ -368,6 +368,7 @@ return {
       'stylua', -- Used to format Lua code
       'markdownlint',
       'ltex',
+      'pyright',
       -- 'vue_ls@3.0.0-alpha.10',
       -- 'vtsls',
     })
