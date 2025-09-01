@@ -69,14 +69,14 @@ local function enable_matrix()
     },
   }
   require('ibl').setup { enabled = false }
-  print 'Color override enabled'
+  print 'Welcome, Neo.'
 end
 
 local function disable_matrix()
   matrix_enabled = false
   reset_colors()
   require('ibl').setup { enabled = false }
-  print 'Color override disabled'
+  print 'Exited the Matrix.'
 end
 
 local function toggle_matrix()
