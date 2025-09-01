@@ -369,6 +369,8 @@ return {
       'markdownlint',
       'ltex',
       'pyright',
+      'bashls',
+      'shellcheck',
       -- 'vue_ls@3.0.0-alpha.10',
       -- 'vtsls',
     })
