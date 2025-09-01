@@ -1,4 +1,4 @@
-.DS_Store
+./**/.DS_Store
 
 .config/nvim/lazy-lock.json
 .config/glab-cli/config.yml
