@@ -13,15 +13,15 @@ return {
         return ''
       end
 
-      local active_client = {}
+      local active_clients = {}
 
       for _, client in pairs(clients) do
         if vim.lsp.buf_is_attached(vim.api.nvim_get_current_buf(), client.id) then
-          table.insert(active_client, client.name)
+          table.insert(active_clients, client.name)
         end
       end
 
-      return ' ' .. table.concat(active_client, ' | ')
+      return next(active_clients) and ' ' .. table.concat(active_clients, ' | ') or ''
     end
 
     require('lualine').setup {
