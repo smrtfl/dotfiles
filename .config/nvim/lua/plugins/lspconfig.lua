@@ -236,6 +236,10 @@ return {
         },
       },
 
+      jdtls = {},
+      basedpyright = {},
+      bashls = {},
+
       yamlls = {
         filetypes = { 'yaml' },
 
@@ -365,14 +369,15 @@ return {
     -- for you, so that they are available from within Neovim.
     local ensure_installed = vim.tbl_keys(mason_servers or {})
     vim.list_extend(ensure_installed, {
-      'stylua', -- Used to format Lua code
-      'markdownlint',
-      'ltex',
-      'pyright',
-      'bashls',
-      'shellcheck',
       -- 'vue_ls@3.0.0-alpha.10',
       -- 'vtsls',
+
+      -- linter
+      'markdownlint',
+      -- formatter
+      'black',
+      'shellcheck',
+      'stylua',
     })
     require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
