@@ -352,6 +352,25 @@ return {
         filetypes = { 'kotlin' },
         root_markers = { 'settings.gradle', 'settings.gradle.kts', 'pom.xml', 'build.gradle', 'build.gradle.kts', 'workspace.json' },
       },
+
+      plantuml_lsp = {
+        cmd = {
+          '/Users/pavlo.nikulin/go/bin/plantuml-lsp',
+          '--stdlib-path=/Users/pavlo.nikulin/.plantuml/stdlib',
+
+          -- FOR DIAGNOSTICS (choose up to one of 'jar-path' and 'exec-path' flags):
+          --
+          -- Running plantuml via a .jar file:
+          '--jar-path=/Users/pavlo.nikulin/.plantuml/stdlib',
+          -- With plantuml executable and available from your PATH there is a simpler method:
+          '--exec-path=plantuml',
+        },
+        filetypes = { 'plantuml' },
+        -- root_dir = function(fname)
+        --   return require('lspconfig').util.find_git_ancestor(fname) or require('lspconfig').util.path.dirname(fname)
+        -- end,
+        -- settings = {},
+      },
     }
 
     -- Ensure the servers and tools above are installed
