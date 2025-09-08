@@ -50,7 +50,7 @@ if [ -d "$GIT_REPO_ABSOLUTE_PATH/${GIT_REPO_NAME}" ]; then
 fi
 
 cd "$GIT_REPO_ABSOLUTE_PATH" || return
-git clone "$GIT_REPO_URL" "$GIT_REPO_FULL_PATH" -t /Users/pavlo.nikulin/.git_template
+git clone "$GIT_REPO_URL" "$GIT_REPO_FULL_PATH"
 if [ $? -ne 0 ]; then
 	error "Failed to clone repository"
 	exit 1

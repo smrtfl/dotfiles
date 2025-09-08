@@ -55,6 +55,7 @@ end, {
 -- IHK reports
 local function MakeIhkReport()
   local now = os.date '*t'
+  local now_time = os.time()
 
   local days_since_monday = (now.wday == 1) and 6 or (now.wday - 2)
   local days_until_sunday = (now.wday == 1) and 0 or (8 - now.wday)
@@ -64,8 +65,8 @@ local function MakeIhkReport()
 
   local monday_str = os.date('%d-%m-%y', monday_time)
   local sunday_str = os.date('%d-%m-%y', sunday_time)
-  local year_str = os.date('%Y', now.year)
-  local month_str = os.date('%B', os.time(now)):lower()
+  local year_str = os.date('%Y', now_time)
+  local month_str = os.date('%B', now_time):lower()
 
   local base_dir = 'reports'
   local template_filename = 'template.md'
@@ -75,7 +76,7 @@ local function MakeIhkReport()
   local report_filename = string.format('%s_%s.md', monday_str, sunday_str)
   local report_filepath = string.format('%s/%s', report_dir, report_filename)
 
-  if vim.fn.filereadable(template_filepath) ~= 0 then
+  if vim.fn.filereadable(report_filepath) ~= 0 then
     print 'Report already exists'
     return
   end
@@ -85,14 +86,12 @@ local function MakeIhkReport()
     return
   end
 
-  print(report_filepath)
-
   vim.fn.mkdir(report_dir, 'p')
 
   vim.fn.writefile(vim.fn.readfile(template_filepath), report_filepath)
 
   local lines = vim.fn.readfile(report_filepath)
-  lines[1] = string.format('# %s - %s', monday_str:sub('-', '.'), sunday_str:sub('-', '.'))
+  lines[1] = string.format('# %s - %s', monday_str:gsub('-', '.'), sunday_str:gsub('-', '.'))
   vim.fn.writefile(lines, report_filepath)
 
   vim.cmd('edit ' .. report_filepath)
@@ -117,7 +116,10 @@ function ParseIhkReport()
   while i <= #lines do
     local line = lines[i]
 
-    if line:match '^#+ ' then
+    if line:match '^### ' then
+      table.insert(result, ParseMarkdown(line))
+      i = i + 1
+    elseif line:match '^#+ ' then
       i = i + 1
     elseif line:match '^%*%*' then
       table.insert(result, ParseMarkdown(line))
