@@ -236,7 +236,21 @@ return {
         },
       },
 
-      jdtls = {},
+      jdtls = {
+        -- settings = {
+        --   java = {
+        --     configuration = {
+        --       runtimes = {
+        --         {
+        --           name = "JavaSE-23",
+        --           path = "/usr/local/sdkman/candidates/java/23-tem",
+        --         },
+        --       },
+        --     },
+        --   },
+        -- },
+      },
+
       basedpyright = {},
       bashls = {},
 
@@ -388,14 +402,13 @@ return {
     -- for you, so that they are available from within Neovim.
     local ensure_installed = vim.tbl_keys(mason_servers or {})
     vim.list_extend(ensure_installed, {
-      -- 'vue_ls@3.0.0-alpha.10',
-      -- 'vtsls',
-
       -- linter
       'markdownlint',
+      'shellcheck',
       -- formatter
       'black',
-      'shellcheck',
+      'prettierd',
+      'shfmt',
       'stylua',
     })
     require('mason-tool-installer').setup { ensure_installed = ensure_installed }
