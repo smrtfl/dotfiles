@@ -1,6 +1,11 @@
 ./**/.DS_Store
 
+.config/*
+
+!.config/nvim/
+!.config/btop/
+!.config/neofetch/
+!.config/skhd/
+!.config/yabai/
+
 .config/nvim/lazy-lock.json
-.config/glab-cli/config.yml
-.config/configstore
-.config/raycast
