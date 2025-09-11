@@ -38,5 +38,8 @@ return {
     -- end
     -- clear cache every time we open neovim
     vim.fn['previm#wipe_cache']()
+
+    vim.keymap.set('n', '<leader>po', ':PrevimOpen<CR>', { desc = '[P]revim [O]pen' })
+    vim.keymap.set('n', '<leader>pr', ':PrevimRefresh<CR>', { desc = '[P]revim [R]efresh' })
   end,
 }

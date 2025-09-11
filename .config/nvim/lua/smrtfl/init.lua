@@ -97,7 +97,7 @@ local function MakeIhkReport()
   vim.cmd('edit ' .. report_filepath)
 end
 
-vim.keymap.set('n', '<leader>mr', MakeIhkReport, { desc = '[M]ake IHK [R]eport' })
+vim.keymap.set('n', '<leader>im', MakeIhkReport, { desc = '[I]HK [M]ake report' })
 
 function ParseIhkReport()
   function ParseMarkdown(md)
@@ -134,4 +134,4 @@ function ParseIhkReport()
   vim.fn.setreg('+', table.concat(result, '\n'))
 end
 
-vim.keymap.set('n', '<leader>pr', ParseIhkReport, { desc = '[P]arse IHK [R]eport' })
+vim.keymap.set('n', '<leader>ip', ParseIhkReport, { desc = '[I]HK [P]arse report' })
