@@ -39,11 +39,11 @@ return {
       opencode.command 'messages_copy'
     end, { desc = '[O]pencode [Y]ank last response' })
 
-    vim.keymap.set('n', '<S-C-u>', function()
+    vim.keymap.set('t', '<M-u>', function()
       opencode.command 'messages_half_page_up'
     end, { desc = 'opencode messages half page up' })
 
-    vim.keymap.set('n', '<S-C-d>', function()
+    vim.keymap.set('t', '<M-d>', function()
       opencode.command 'messages_half_page_down'
     end, { desc = 'opencode messages half page down' })
 
