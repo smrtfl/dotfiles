@@ -35,6 +35,7 @@ return { -- Autoformat
       markdown = { 'prettierd', 'markdownlint' },
       python = { 'black' },
       sh = { 'shfmt' },
+      json = { 'prettierd' },
       yaml = { 'prettierd' },
       -- Conform can also run multiple formatters sequentially
       -- python = { "isort", "black" },
