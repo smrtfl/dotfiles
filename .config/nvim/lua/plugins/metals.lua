@@ -15,6 +15,7 @@ return {
     metals_config.settings = {
       showImplicitArguments = true,
       excludedPackages = { 'akka.actor.typed.javadsl', 'com.github.swagger.akka.javadsl' },
+      testUserInterface = 'Test Explorer',
     }
 
     -- *READ THIS*

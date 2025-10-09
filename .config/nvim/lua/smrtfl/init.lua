@@ -1,7 +1,7 @@
 -- File Location
 function OpenFileAtLocation()
   vim.ui.input({ prompt = 'File at location: ' }, function(input)
-    local file, line, col = string.match(input or '', '^(.-):?(%d*):?(%d*)$')
+    local file, line, col = string.match(input:gsub('^%s*(.-)%s*$', '%1'), '^(.-):?(%d*):?(%d*)$')
 
     file = file ~= '' and file or nil
     line = line ~= '' and tonumber(line) or nil
@@ -24,13 +24,65 @@ end
 vim.keymap.set('n', '<leader>fl', OpenFileAtLocation, { desc = '[F]ile in [L]ocation' })
 
 -- Terminal
-vim.keymap.set('n', '<leader>tt', function()
+local function safe_open_terminal()
+  for _, win in ipairs(vim.api.nvim_list_wins()) do
+    local buf = vim.api.nvim_win_get_buf(win)
+
+    if vim.bo[buf].buftype == 'terminal' then
+      vim.api.nvim_set_current_win(win)
+      return
+    end
+  end
+
   vim.cmd.vnew()
   vim.cmd.term()
   vim.cmd.wincmd 'J'
   vim.api.nvim_win_set_height(0, 15)
   vim.api.nvim_win_set_option(0, 'winfixheight', true)
+end
+
+local function open_terminal(cmd)
+  safe_open_terminal()
+
+  if cmd then
+    vim.cmd 'normal! G'
+
+    local term_buf = vim.api.nvim_get_current_buf()
+    vim.api.nvim_chan_send(vim.b[term_buf].terminal_job_id, cmd .. '\n')
+  end
+end
+
+vim.keymap.set('n', '<leader>tt', function()
+  open_terminal()
 end, { desc = '[T]oggle [T]erminal' })
+
+-- Scala
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = { 'scala', 'sbt' },
+  callback = function()
+    vim.keymap.set('n', '<leader>sco', function()
+      open_terminal 'sbt compile'
+    end, { buffer = true, desc = '[S]sbt [C]lean [C]ompile' })
+  end,
+})
+
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = { 'scala', 'sbt' },
+  callback = function()
+    vim.keymap.set('n', '<leader>scc', function()
+      open_terminal 'sbt clean compile'
+    end, { buffer = true, desc = '[S]sbt [C]lean [C]ompile' })
+  end,
+})
+
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = { 'scala', 'sbt' },
+  callback = function()
+    vim.keymap.set('n', '<leader>spl', function()
+      open_terminal 'sbt publishLocal'
+    end, { buffer = true, desc = '[S]bt [P]ublish [L]ocal' })
+  end,
+})
 
 -- LTeX
 vim.api.nvim_create_user_command('LtexLang', function(opts)
@@ -55,7 +107,6 @@ end, {
 -- IHK reports
 local function MakeIhkReport()
   local now = os.date '*t'
-  local now_time = os.time()
 
   local days_since_monday = (now.wday == 1) and 6 or (now.wday - 2)
   local days_until_sunday = (now.wday == 1) and 0 or (8 - now.wday)
@@ -65,8 +116,8 @@ local function MakeIhkReport()
 
   local monday_str = os.date('%d-%m-%y', monday_time)
   local sunday_str = os.date('%d-%m-%y', sunday_time)
-  local year_str = os.date('%Y', now_time)
-  local month_str = os.date('%B', now_time):lower()
+  local year_str = os.date('%Y', monday_time)
+  local month_str = os.date('%B', monday_time):lower()
 
   local base_dir = 'reports'
   local template_filename = 'template.md'
@@ -78,6 +129,9 @@ local function MakeIhkReport()
 
   if vim.fn.filereadable(report_filepath) ~= 0 then
     print 'Report already exists'
+
+    vim.cmd('edit ' .. report_filepath)
+
     return
   end
 

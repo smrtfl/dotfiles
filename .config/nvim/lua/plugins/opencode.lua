@@ -25,7 +25,7 @@ return {
 
     vim.keymap.set('n', '<leader>oa', function()
       opencode.ask '@cursor: '
-    end, { desc = 'Ask opencode about this' })
+    end, { desc = '[O]pencode ask [A]bout at cursor' })
 
     vim.keymap.set('v', '<leader>oa', function()
       opencode.ask '@selection: '
@@ -47,13 +47,45 @@ return {
       opencode.command 'messages_half_page_down'
     end, { desc = 'opencode messages half page down' })
 
-    vim.keymap.set({ 'n', 'v' }, '<leader>os', function()
+    vim.keymap.set({ 'n', 'v' }, '<leader>op', function()
       opencode.select()
-    end, { desc = '[O]pencode [S]elect prompt' })
+    end, { desc = '[O]pencode [P]rompt' })
 
     -- custom prompt
     vim.keymap.set('n', '<leader>oe', function()
       require('opencode').prompt 'Explain @cursor and its context'
     end, { desc = '[O]pencode [E]xplain' })
+
+    vim.keymap.set('v', '<leader>oe', function()
+      require('opencode').prompt 'Explain @selection and its context'
+    end, { desc = '[O]pencode [E]xplain' })
   end,
 }
+
+-- return {
+--   'sudo-tee/opencode.nvim',
+--   config = function()
+--     require('opencode')
+--     vim.g.opencode_opts = {}
+--   end,
+--   dependencies = {
+--     'nvim-lua/plenary.nvim',
+--     {
+--       'MeanderingProgrammer/render-markdown.nvim',
+--       opts = {
+--         anti_conceal = { enabled = false },
+--         file_types = { 'markdown', 'opencode_output' },
+--       },
+--       ft = { 'markdown', 'Avante', 'copilot-chat', 'opencode_output' },
+--     },
+--     -- Optional, for file mentions and commands completion, pick only one
+--     'saghen/blink.cmp',
+--     -- 'hrsh7th/nvim-cmp',
+--
+--     -- Optional, for file mentions picker, pick only one
+--     'folke/snacks.nvim',
+--     -- 'nvim-telescope/telescope.nvim',
+--     -- 'ibhagwan/fzf-lua',
+--     -- 'nvim_mini/mini.nvim',
+--   },
+-- }

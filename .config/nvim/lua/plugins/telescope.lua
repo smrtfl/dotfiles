@@ -89,7 +89,7 @@ return { -- Fuzzy Finder (files, lsp, etc)
     --   }
     -- end
 
-    local file_ignore_patterns = { 'node_modules/', '.git/', '.venv/', '.idea/', '.metals/', '.bloop/' }
+    local file_ignore_patterns = { 'node_modules/', '.git/', '.venv/', '__pycache__', '.idea/', '.metals/', '.bloop/' }
 
     local telescope = require 'telescope'
     local themes = require 'telescope.themes'

@@ -8,11 +8,25 @@ return {
     end,
   },
   config = function()
-    vim.keymap.set('n', '<leader>ro', '<cmd>Rest open<CR>', { desc = '[R]est [O]pen' })
-    vim.keymap.set('n', '<leader>rr', '<cmd>Rest run<CR>', { desc = '[R]est [R]un' })
-    vim.keymap.set('n', '<leader>rl', '<cmd>Rest run<CR>', { desc = '[R]est [L]ast' })
+    vim.api.nvim_create_autocmd('FileType', {
+      pattern = 'json',
+      callback = function(ev)
+        vim.bo[ev.buf].formatexpr = ''
+        vim.bo[ev.buf].formatprg = 'jq'
+      end,
+    })
+
+    require('rest-nvim').setup {
+      request = {
+        skip_ssl_verification = true,
+      },
+    }
+
+    vim.keymap.set('n', '<leader>ro', '<cmd>Rest open<CR>', { desc = '[R]EST [O]pen' })
+    vim.keymap.set('n', '<leader>rr', '<cmd>Rest run<CR>', { desc = '[R]EST [R]un' })
+    vim.keymap.set('n', '<leader>rl', '<cmd>Rest run<CR>', { desc = '[R]EST [L]ast' })
     vim.keymap.set('n', '<leader>re', function()
       require('telescope').extensions.rest.select_env()
-    end, { desc = '[R]est [E]nv' })
+    end, { desc = '[R]EST [E]nv' })
   end,
 }

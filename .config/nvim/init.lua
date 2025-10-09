@@ -178,7 +178,7 @@ vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 
 vim.keymap.set('n', 'K', function()
-  vim.lsp.buf.hover { border = 'rounded' }
+  vim.lsp.buf.hover { border = 'solid' }
 end)
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
@@ -222,6 +222,8 @@ vim.g.neovide_input_macos_alt_is_meta = true
 vim.keymap.set('x', '<leader>p', [["_dP]])
 
 vim.keymap.set('n', '<leader>wx', ':w<CR>:Ex<CR>', { noremap = true, silent = true })
+
+vim.keymap.set('n', '<leader>wn', ':noa w<CR>', { noremap = true, silent = true })
 
 require './lazy'
 require 'smrtfl'
