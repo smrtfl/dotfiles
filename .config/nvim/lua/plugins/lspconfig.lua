@@ -410,6 +410,8 @@ return {
       'prettierd',
       'shfmt',
       'stylua',
+      'tex-fmt',
+      'terraform',
     })
     require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 

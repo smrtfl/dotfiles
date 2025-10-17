@@ -62,7 +62,7 @@ vim.api.nvim_create_autocmd('FileType', {
   callback = function()
     vim.keymap.set('n', '<leader>sco', function()
       open_terminal 'sbt compile'
-    end, { buffer = true, desc = '[S]sbt [C]lean [C]ompile' })
+    end, { buffer = true, desc = '[S]sbt [C][O]mpile' })
   end,
 })
 

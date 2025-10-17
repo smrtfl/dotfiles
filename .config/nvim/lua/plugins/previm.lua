@@ -1,6 +1,6 @@
 return {
   'previm/previm',
-  ft = { 'plantuml', 'asciidoc' },
+  ft = { 'markdown', 'plantuml', 'asciidoc' },
   dependencies = {
     {
       'aklt/plantuml-syntax',

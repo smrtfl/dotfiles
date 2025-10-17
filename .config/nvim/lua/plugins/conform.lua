@@ -35,8 +35,10 @@ return { -- Autoformat
       markdown = { 'prettierd', 'markdownlint' },
       python = { 'black' },
       sh = { 'shfmt' },
+      terraform = { 'terraform' },
       json = { 'prettierd' },
       yaml = { 'prettierd' },
+      tex = { 'tex-fmt' },
       -- Conform can also run multiple formatters sequentially
       -- python = { "isort", "black" },
       --
