@@ -34,6 +34,7 @@ return { -- Autoformat
       lua = { 'stylua' },
       markdown = { 'prettierd', 'markdownlint' },
       python = { 'black' },
+      go = { 'goimports', 'gofumpt' },
       sh = { 'shfmt' },
       terraform = { 'terraform' },
       json = { 'prettierd' },

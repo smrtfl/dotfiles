@@ -11,14 +11,15 @@ return {
       continuous = 1,
       executable = 'latexmk',
       options = {
-        '-xelatex',
+        '-lualatex',
+        '-shell-escape',
         '-interaction=nonstopmode',
         '-synctex=1',
         '-pvc',
       },
     }
     vim.g.vimtex_compiler_latexmk_engines = {
-      ['_'] = '-xelatex',
+      ['_'] = '-lualatex',
     }
 
     vim.g.vimtex_view_method = 'skim'
